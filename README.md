@@ -86,26 +86,27 @@ Vectorization, multiprocessing, Cython, N+1 fixes
 ### Day 4
 
 **[AM – Packaging & Versioning](day_4/am/)**  
-_setup.py, requirements, semantic versioning_
+_setup.py, requirements, semantic versioning_  
 
 - **Tutorials:**  
-  - [`01_setup_recap/`](day_4/am/01_setup_recap/)  
-  - [`02_versioning_strategies/`](day_4/am/02_versioning_strategies/)  
-  - [`03_installation_strategies/`](day_4/am/03_installation_strategies/)  
+  - `01_setup_recap/`  
+  - `02_versioning_strategies/`  
+  - `03_installation_strategies/`  
 - **Tasks:**  
-  - [`01_semantic_versioning_changelog.md`](day_4/am/tasks/05_semantic_versioning_changelog.md)  
-  - [`02_installation_strategy_comparison.md`](day_4/am/tasks/06_installation_strategy_comparison.md)  
+  - `01_semantic_versioning_changelog.md`  
+  - `02_installation_strategy_comparison.md`  
 
 **[PM – CI/CD with GitLab](day_4/pm/)**  
-_.gitlab-ci.yml, test automation, publishing_
+_.gitlab-ci.yml, test automation, publishing_  
 
 - **Guides:**  
-  - [`02_writing_effective_gitlab_ci.md`](day_4/pm/02_writing_effective_gitlab_ci.md)  
-  - [`03_twine_and_pypi_deployment.md`](day_4/pm/03_twine_and_pypi_deployment.md)  
-  - [`04_automated_cli_jobs.md`](day_4/pm/04_automated_cli_jobs.md)  
+  - `02_writing_effective_gitlab_ci.md`  
+  - `03_twine_and_pypi_deployment.md`  
+  - `04_automated_cli_jobs.md`  
 - **Tasks:**  
-  - [`01_write_and_run_pytest_ci.md`](day_4/pm/tasks/07_write_and_run_pytest_ci.md)  
-  - [`02_deploy_dry_run.md`](day_4/pm/tasks/08_deploy_dry_run.md)  
+  - `01_write_and_run_pytest_ci.md`  
+  - `02_deploy_dry_run.md`  
+
 
 ## Requirements
 
