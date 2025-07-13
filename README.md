@@ -88,24 +88,15 @@ Vectorization, multiprocessing, Cython, N+1 fixes
 **[AM – Packaging & Versioning](day_4/am/)**  
 _setup.py, requirements, semantic versioning_  
 
-- **Tutorials:**  
-  - `01_setup_recap/`  
-  - `02_versioning_strategies/`  
-  - `03_installation_strategies/`  
-- **Tasks:**  
-  - `01_semantic_versioning_changelog.md`  
-  - `02_installation_strategy_comparison.md`  
+- Tutorials: `01_setup_recap/`, `02_versioning_strategies/`, `03_installation_strategies/`  
+- Tasks: `01_semantic_versioning_changelog.md`, `02_installation_strategy_comparison.md`  
 
 **[PM – CI/CD with GitLab](day_4/pm/)**  
 _.gitlab-ci.yml, test automation, publishing_  
 
-- **Guides:**  
-  - `02_writing_effective_gitlab_ci.md`  
-  - `03_twine_and_pypi_deployment.md`  
-  - `04_automated_cli_jobs.md`  
-- **Tasks:**  
-  - `01_write_and_run_pytest_ci.md`  
-  - `02_deploy_dry_run.md`  
+- Guides: `02_writing_effective_gitlab_ci.md`, `03_twine_and_pypi_deployment.md`, `04_automated_cli_jobs.md`  
+- Tasks: `01_write_and_run_pytest_ci.md`, `02_deploy_dry_run.md`  
+
 
 
 ## Requirements
