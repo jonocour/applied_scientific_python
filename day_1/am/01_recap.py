@@ -58,6 +58,7 @@ data_dict = {"H": 1, "He": 2}
 # 3. COMPREHENSIONS
 # Use case: Build new collections in a single readable line
 # ---------------------------------------------
+# Squares of even numbers from a list
 
 # List comprehension – create list of squares
 squares = [x ** 2 for x in data_list]
@@ -78,6 +79,22 @@ even_set = {x for x in data_list if x % 2 == 0}
 # Generator expression – does NOT build the full list in memory
 square_gen = (x ** 2 for x in data_list)
 
+def countdown(n):
+    # A generator function that counts down from n to 1
+    while n > 0:
+        yield n   # Yield returns the next value and pauses the function here
+        n -= 1    # State is preserved until the next call
+
+# Using the generator
+for num in countdown(5):
+    print(num)
+
+# Advantages of using a generator:
+# - Generates numbers one at a time (lazy evaluation) — saves memory
+# - You don’t need to create a full list like [5, 4, 3, 2, 1] in memory
+# - Ideal for large ranges or streams of data
+# - Execution can be paused and resumed — useful for pipelines
+# - Cleaner and more efficient than managing state manually with a loop and a list
 # Tip: You can only loop through a generator ONCE!
 
 # ---------------------------------------------
@@ -89,13 +106,56 @@ def add(a, b):
     """Add two numbers."""
     return a + b
 
-# Lambda function – inline, anonymous function (often used in sorting, filtering, etc.)
-multiply = lambda x, y: x * y
+# ---------------------------------------------
+# Lambda Functions – inline, anonymous functions
+# Often used in sorting, filtering, simple operations
+# ---------------------------------------------
 
-# Mini Challenge:
-# Convert the lambda above to a named function:
-# def multiply(x, y):
-#     return x * y
+# Example 1 – Multiply two numbers with a lambda
+multiply = lambda x, y: x * y
+print("multiply (lambda):", multiply(3, 4))  # Output: 12
+
+# Example 2 – Sort a list of tuples by the second element using lambda
+data = [(1, 'b'), (3, 'a'), (2, 'c')]
+sorted_data = sorted(data, key=lambda item: item[1])
+print("sorted data (lambda):", sorted_data)  # Output: [(3, 'a'), (1, 'b'), (2, 'c')]
+
+# Example 3 – Filter even numbers from a list using lambda
+nums = [1, 2, 3, 4, 5, 6]
+evens = list(filter(lambda x: x % 2 == 0, nums))
+print("even numbers (lambda):", evens)  # Output: [2, 4, 6]
+
+# ---------------------------------------------
+# Mini Challenge – Convert lambdas to named functions
+# ---------------------------------------------
+
+# Named version of multiply
+def multiply_named(x, y):
+    return x * y
+
+print("multiply_named:", multiply_named(3, 4))  # Output: 12
+
+# Named key function for sorting
+def get_second(item):
+    return item[1]
+
+sorted_data_named = sorted(data, key=get_second)
+print("sorted_data_named:", sorted_data_named)  # Output: [(3, 'a'), (1, 'b'), (2, 'c')]
+
+# Named filter function for even numbers
+def is_even(x):
+    return x % 2 == 0
+
+evens_named = list(filter(is_even, nums))
+print("evens_named:", evens_named)  # Output: [2, 4, 6]
+
+
+
+
+
+
+
+
 
 # ---------------------------------------------
 # MAIN EXECUTION BLOCK – Examples & Output

@@ -9,16 +9,17 @@ Instructions:
 
 import functools
 
+
 # 1. Use partial to convert Celsius to Kelvin
 def convert(temp, offset):
     """Add an offset to a temperature value."""
     return temp + offset  # This is provided for clarity
 
+
 # TODO: Use functools.partial to create a function 'c_to_k' that adds 273.15
 # Example: c_to_k(25) => 298.15
 # Your code here:
 # c_to_k = ...
-
 
 
 # 2. Use reduce to multiply all even numbers in a list
@@ -30,14 +31,12 @@ def even_product(numbers):
     pass
 
 
-
 # 3. Use lru_cache to memoize a recursive Fibonacci function
 # TODO: Decorate this function with @lru_cache (maxsize=64)
 # Then implement a standard recursive Fibonacci calculation
 def fib(n):
     """Compute nth Fibonacci number with caching."""
     pass
-
 
 
 # === TEST YOUR IMPLEMENTATION ===

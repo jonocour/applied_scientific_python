@@ -14,6 +14,7 @@ Instructions:
 
 import itertools
 
+
 # 1. Use chain to flatten two lists
 # Example: [1, 2] and [3, 4] → [1, 2, 3, 4]
 def flatten_lists(a, b):
@@ -22,14 +23,12 @@ def flatten_lists(a, b):
     pass
 
 
-
 # 2. Use combinations to generate all unique 2-element pairs
 # Example: ['A', 'B', 'C'] → [('A','B'), ('A','C'), ('B','C')]
 def all_pairs(elements):
     """Return all 2-item combinations from the input list."""
     # TODO: Use itertools.combinations
     pass
-
 
 
 # 3. Use groupby to group a list of (label, value) tuples by label
@@ -42,7 +41,6 @@ def group_by_label(pairs):
     # 2. Use itertools.groupby
     # 3. Collect results into a dictionary
     pass
-
 
 
 # === TEST YOUR IMPLEMENTATION ===
