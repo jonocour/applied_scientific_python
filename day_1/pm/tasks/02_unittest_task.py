@@ -11,13 +11,14 @@ Task:
 
 import unittest
 
-
 def standardize(values):
     """Return z-scores (standardized values)."""
     if not values:
         raise ValueError("Input cannot be empty.")
     mean = sum(values) / len(values)
     std = (sum((x - mean) ** 2 for x in values) / len(values)) ** 0.5
+    if std == 0:
+        return [0.0 for _ in values]  # All standardized values should be 0.0
     return [(x - mean) / std for x in values]
 
 

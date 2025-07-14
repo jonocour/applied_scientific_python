@@ -29,17 +29,12 @@ def c_to_k(temp_c):
         raise TypeError("Temperature must be a number.")
     return temp_c + 273.15
 
-
-
-
 def calculate_force(mass, acceleration):
     return mass * acceleration
 
 def test_calculate_force():
     result = calculate_force(5, 9.81)
     assert result == pytest.approx(49.05, rel=1e-4)
-
-
 
 # =====================================
 #  1. BASIC ASSERT TESTS

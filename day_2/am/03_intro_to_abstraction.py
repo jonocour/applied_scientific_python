@@ -23,10 +23,10 @@ import abc
 #   - Forces child classes to implement certain methods
 
 # ---------------------------------------------
-# 2. Example: ScientificMeasurement ABC
+# 2. Example: Measurement ABC
 # ---------------------------------------------
 
-class ScientificMeasurement(abc.ABC):
+class Measurement(abc.ABC):
     """Abstract Base Class for scientific measurements."""
 
     @abc.abstractmethod
@@ -43,7 +43,7 @@ class ScientificMeasurement(abc.ABC):
 # 3. Implementing a Concrete Class
 # ---------------------------------------------
 
-class TemperatureMeasurement(ScientificMeasurement):
+class TemperatureMeasurement(Measurement):
     def __init__(self, temp_c):
         self.temp_c = temp_c
 
@@ -62,7 +62,7 @@ if __name__ == "__main__":
     print("Temperature:", t.value(), t.units())
 
     # Uncommenting this would cause an error:
-    # m = ScientificMeasurement()  # TypeError: Can't instantiate abstract class
+    # m = Measurement()  # TypeError: Can't instantiate abstract class
 
 # ---------------------------------------------
 # 5. Best Practices

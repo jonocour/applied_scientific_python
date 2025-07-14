@@ -19,6 +19,7 @@ Example:
     print(earth.surface_gravity()) ➞ ~9.81 m/s²
 """
 
+
 class Planet:
     # TODO: Define __init__ with name, mass (kg), radius (km)
     pass
@@ -30,13 +31,22 @@ class Planet:
     # Convert radius to meters inside the method
     pass
 
+    # CHALLENGE:
+    # TODO: Override __add__ so adding two Planet objects returns a new Planet
+    # - Name: "CombinedPlanet"
+    # - Mass: sum of both masses
+    # - Radius: sum of both radii
+    pass
+
 # === TEST YOUR IMPLEMENTATION ===
+
+
 if __name__ == "__main__":
     earth = Planet("Earth", mass=5.972e24, radius_km=6371)
     mars = Planet("Mars", mass=6.417e23, radius_km=3389.5)
-
-    print(earth.summary())          # Planet Earth: ...
+    marth = earth + mars # in an IDE, this + is flagged (it will complain we haven't implemented __add__
+    print(earth.summary())
     print("Gravity:", earth.surface_gravity(), "m/s²")
 
-    print(mars.summary())           # Planet Mars: ...
+    print(mars.summary())
     print("Gravity:", mars.surface_gravity(), "m/s²")

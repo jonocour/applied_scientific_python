@@ -1,74 +1,72 @@
 """
-TASK 04 – Build Your Own Scientific CLI Tool
-============================================
+TASK 02 – Build Your Own Scientific CLI Tool (Argparse)
+=======================================================
 
 Goal:
 -----
-Practice creating your own command-line interface for a scientific function.
+Practice creating your own command-line interface using **argparse** for a basic calculation.
 
 Instructions:
 -------------
 You will:
-1. Define a simple scientific function: `density(mass, volume)`
-2. Wrap it in a CLI using a tool of your choice (argparse, Click, or Typer)
+1. Define a function: `pressure(force, area)`
+2. Wrap it in a CLI using **argparse**
 3. Run the tool from the terminal with custom parameters
 
 Part 1 – The Function
 ---------------------
-Define a function that computes density using:
-    density = mass / volume
+Define a function that computes pressure using:
+    pressure = force / area
 
 Include error handling:
-- Raise ValueError if volume is zero or negative
+- Raise ValueError if area is zero or negative
 
 Part 2 – CLI Tool
 -----------------
-- Let users specify mass and volume via command-line arguments
-- Choose a CLI tool you’re comfortable with
-    - argparse: basic usage
-    - click: nice syntax & validation
-    - typer: modern, type-hinted
+- Use argparse to let users specify:
+    --force  (float)
+    --area   (float)
+
+- Parse the arguments, call the `pressure()` function, and print the result nicely
 
 How to test (once implemented):
 -------------------------------
-    $ python 04_cli_your_own_tool_task.py --mass 10 --volume 2.5
+    $ python 02_create_your_own_argparse_task.py --force 100 --area 5
 
-Or for Click/Typer:
-    $ python 04_cli_your_own_tool_task.py calculate --mass 10 --volume 2.5
+Expected output example:
+------------------------
+    Pressure = 20.00 Pascals (Pa)
 
 Optional:
 ---------
-- Format the result with units (e.g., "Density = 4.0 kg/m³")
-- Add more features: auto-detect units, scientific notation, etc.
+- Format result with scientific notation if appropriate
+- Add input validation for negative force
 """
 
-# === TODO: Define a function called `density(mass, volume)` ===
-# It should return mass / volume, and raise an error if volume <= 0
+# === TODO: Define a function called `pressure(force, area)` ===
+# It should return force / area, and raise an error if area <= 0
 
 
-# === TODO: Choose a CLI tool (argparse, click, or typer)
-# Set up CLI argument parsing for --mass and --volume
-# Call the density() function and print the result nicely
+# === TODO: Use argparse.ArgumentParser to set up CLI arguments for --force and --area
+# Call the pressure() function with the parsed arguments and print the result
 
 
-# === Example stub (edit this or delete) ===
-def density(mass, volume):
-    if volume <= 0:
-        raise ValueError("Volume must be greater than zero.")
-    return mass / volume
+# === Example stub (edit or delete as needed) ===
+def pressure(force, area):
+    if area <= 0:
+        raise ValueError("Area must be greater than zero.")
+    return force / area
 
 
-# === TODO: Implement your CLI entry point below
-# Hint: For argparse, use argparse.ArgumentParser
-#       For click, decorate a function with @click.command()
-#       For typer, use @app.command() with type hints
+# === TODO: Implement your CLI entry point below ===
+# Hint: Use argparse.ArgumentParser(description="...")
+#       Add --force and --area as required arguments with type=float
+#       Call the pressure() function and print the result formatted nicely
 
 
 # === TEST YOUR TOOL ===
 # if __name__ == "__main__":
-#     Run your CLI tool
-
-
+#     Run your CLI tool here
 
 
 
@@ -97,25 +95,17 @@ def density(mass, volume):
 
 
 # =======================================================
-# Further Reading – Scientific Packages for Density
+# Further Reading – Scientific Packages for Pressure
 # =======================================================
-# These libraries go beyond basic density = mass / volume
-# and are useful in real scientific and engineering work:
+# These libraries go beyond basic pressure = force / area:
 
 # 1. pint
-#    - Handles unit-aware calculations (e.g., kg/L, g/cm³)
-#    - Ensures correctness of units and conversions
-#    - Example: (10 * ureg.kg) / (2 * ureg.liter)
+#    - Handles units and conversions for pressure (Pa, bar, atm)
+#    - Example: (100 * ureg.newton) / (2 * ureg.square_meter)
 
 # 2. scipy.constants
-#    - Provides physical constants (e.g., Avogadro, liter, atmosphere)
-#    - Useful for conversions and precise scientific computation
-#    - Example: Convert liters to cubic meters using `scipy.constants.liter`
+#    - Provides constants like atmosphere, Pascal, etc.
+#    - Useful for scientific accuracy and conversions
 
-# 3. CoolProp
-#    - Advanced library for fluid properties (density, enthalpy, etc.)
-#    - Used in thermodynamics, chemical engineering
-#    - Example: Look up the density of water at a specific temperature and pressure
-
-# These are not needed for this task, but worth exploring!
+# These are optional but great for advanced work!
 # =======================================================

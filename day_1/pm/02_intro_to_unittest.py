@@ -39,7 +39,7 @@ class TestMeanBasic(unittest.TestCase):
         self.assertEqual(mean([42]), 42.0)
 
     def test_floats(self):
-        self.assertAlmostEqual(mean([0.1, 0.2, 0.3]), 0.2, places=6)
+        self.assertAlmostEqual(mean([0.1, 0.2, 0.3]), 0.2, delta=6)
 
 # ============================================
 #2. ASSERT RAISES FOR EXCEPTIONS
@@ -58,7 +58,6 @@ class TestMeanExceptions(unittest.TestCase):
 #3. MULTIPLE ASSERTS IN ONE TEST
 # ============================================
 class TestMeanMultiple(unittest.TestCase):
-
     def test_various_inputs(self):
         self.assertEqual(mean([2, 2, 2]), 2.0)
         self.assertEqual(mean([5, 10, 15]), 10.0)

@@ -1,106 +1,120 @@
 """
-01_python_and_cli.py
-=====================
+01_intro_to_oop.py
+==================
 
-Intro to Command-Line Interfaces (CLI) in Scientific Python
------------------------------------------------------------
+Intro to Object-Oriented Programming (OOP) in Python
+----------------------------------------------------
 
-Why Use CLI Tools?
-------------------
-- Scientific scripts often require parameters: mass, temperature, dataset path, etc.
-- Instead of editing the Python file each time, it's better to pass arguments via the terminal.
-- This makes code more reusable, automatable, and shareable with other scientists.
+Why OOP?
+--------
+- OOP lets us model scientific concepts with both data and behavior.
+- Helps enforce valid operations on data through encapsulation.
+- Makes objects behave like built-in types using special methods.
+
+Encapsulation in Python:
+------------------------
+- Python doesn't enforce access control like Java/C++.
+- Uses naming conventions instead:
+    - public: no underscore — open access.
+    - _protected: single underscore — intended for internal use.
+    - __private: double underscore — name mangling to avoid accidental access.
+- Python trusts the developer: conventions over strict rules.
 
 Learning Outcomes:
 ------------------
-- Understand why CLI tools matter in scientific computing
-- Recognize when to use argparse, Click, or Typer
-- Learn how to run scripts with parameters from the shell
-
+- Understand encapsulation (public, protected, private).
+- Use special methods for intuitive object behavior.
+- Recognize Python's flexible approach to access control.
 """
 
 # =======================================================
-# 0. MOTIVATION – Why not hardcode values into scripts?
+# 0. MOTIVATION — Let's make objects act like numbers
 # =======================================================
 
-# Imagine you're running a physics script:
-
-# mass = 2.5
-# acceleration = 9.8
-# force = mass * acceleration
-# print(force)
-
-# This works, but every time you want to try new values, you have to edit the script.
-# Instead, run it like this from the command line:
-
-# $ python force.py --mass 2.5 --acceleration 9.8
-
-#  Cleaner, safer, reproducible — you don't touch the code, just change the inputs.
+# You want a Measurement class:
+# - Can be printed nicely
+# - Can be added together (if units match)
+# - Protects its internal value from accidental misuse
 
 # =======================================================
-# 1. CLIs ENABLE AUTOMATION & PIPELINES
+# 1. DEFINING A CLASS WITH PUBLIC, PROTECTED, AND PRIVATE
 # =======================================================
+class Measurement:
+    """A scientific measurement with encapsulation, special methods, and property decorators."""
 
-# By using CLI tools, you can automate workflows:
+    def __init__(self, value, unit):
+        self._value = value    # Protected by convention
+        self.unit = unit       # Public
+        self.__id = id(self)   # Private with name mangling
 
-# $ python analyze.py --input experiment1.csv
-# $ python analyze.py --input experiment2.csv
+    @property
+    def value(self):
+        """Getter for _value (allows m.value access)."""
+        return self._value
 
-# Or in a shell loop:
-# $ for f in *.csv; do python analyze.py --input $f; done
+    @value.setter
+    def value(self, new_value):
+        """Setter with validation (allows m.value = x)."""
+        if new_value < 0:
+            raise ValueError("Measurement cannot be negative.")
+        self._value = new_value
 
-# This kind of usage is common in high-performance computing, batch jobs, and pipelines.
+    @property
+    def id(self):
+        """Read-only access to private __id."""
+        return self.__id
 
-# =======================================================
-# 2. CLIs ENABLE REPRODUCIBILITY
-# =======================================================
+    def __str__(self):
+        return f"{self._value} {self.unit}"
 
-# Running code with explicit CLI parameters helps you keep track of what was done:
+    def __add__(self, other):
+        if self.unit != other.unit:
+            raise ValueError("Can't add measurements with different units.")
+        return Measurement(self._value + other._value, self.unit)
 
-# $ python fit_model.py --alpha 0.05 --iterations 1000 --seed 42
+    def __eq__(self, other):
+        return self.unit == other.unit and self._value == other._value
 
-# You can copy this command into a README, notebook, or log file.
-# Anyone (including future you) can re-run the exact same experiment.
-
-# =======================================================
-# 3. CLIs MAKE YOUR CODE SHAREABLE
-# =======================================================
-
-# You can wrap a Python script with CLI tools and share it with a colleague:
-
-# $ python temp_convert.py --celsius 37
-
-# They don’t need to know Python — just how to run a terminal command.
-
-# =======================================================
-# 4. WHICH TOOL TO USE?
-# =======================================================
-
-# | Tool       | Best For                                 | Why Use It                                                           |
-# | ---------- | ---------------------------------------- | -------------------------------------------------------------------- |
-# | argparse   | Built-in basics                          | No install, good for learning or short scripts                       |
-# | Click      | Simpler syntax, mid-size tools           | Great for productivity, includes validation/help                     |
-# | Typer      | Production-quality tools with type hints | Best for long-term code, uses type hints for safety and autocomplete |
-
-# You'll learn all three in this section.
 
 # =======================================================
-# 5. COMMON CLI USE CASES
+# 2. USAGE EXAMPLES
+# =======================================================
+m = Measurement(10, "kg")
+m1 = Measurement(5, "m")
+m2 = Measurement(3, "m")
+total = m1 + m2
+
+print(m1)       # 5 m
+print(m2)       # 3 m
+print(total)    # 8 m
+
+# Accessing protected attribute (allowed but discouraged)
+print(m1._value)  # ➔ Works, but violates encapsulation
+
+# Accessing private attribute directly — fails
+# print(m1.__id)   # ➔ Raises AttributeError!
+
+# Correct ways to access the private attribute
+print(m1.id)                 # ➔ Via property (recommended)
+print(m1._Measurement__id)   # ➔ Name mangling (not recommended)
+
+# Using property for value
+print(m.value)   # ➔ Getter via @property
+m.value = 15     # ➔ Setter with validation
+print(m)         # ➔ 15 kg
+
+# Attempting invalid value — raises ValueError
+# m.value = -5
+
+# Accessing read-only id
+print(m.id)      # ➔ Read-only property
+
+# =======================================================
+# 3. KEY TAKEAWAYS
 # =======================================================
 
-# Tool Goal                       | Example Command
-# -------------------------------|---------------------------------------------
-# Run a simulation                | $ python simulate.py --particles 1000 --steps 5000
-# Analyze experimental data       | $ python analyze.py --input data.csv --normalize log
-# Convert between units           | $ python convert_temp.py --celsius 37
-# Batch rename genome files       | $ python rename_genomes.py --pattern "chr*.fa"
-
-# =======================================================
-# 6. WHAT YOU SHOULD REMEMBER
-# =======================================================
-
-# In a real working environment, you shouldn’t change the Python code every time you want a new result.
-#  You should write a script once, and let the inputs drive it — that’s what CLI tools are for.
-
-# Coming up next: argparse, Click, and Typer — with live, runnable examples.
-
+# - Python uses naming conventions for access control.
+# - _single: protected — "internal use"
+# - __double: private — "name mangled" (not strictly enforced)
+# - Use getters/setters when validation is needed.
+# - Special methods let you define natural behavior for your objects.
