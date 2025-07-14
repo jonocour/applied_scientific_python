@@ -14,12 +14,12 @@ Instructions:
 
 import itertools
 
-
 # 1. Use chain to flatten two lists
 # Example: [1, 2] and [3, 4] → [1, 2, 3, 4]
 def flatten_lists(a, b):
     """Combine two lists into one using itertools.chain."""
     # TODO: Use itertools.chain and convert to a list
+
     pass
 
 

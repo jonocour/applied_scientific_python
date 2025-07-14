@@ -49,7 +49,7 @@ def mean(values):
 
 def buggy_calc(x, y):
     result = x + y
-    import pdb; pdb.set_trace()  # ⏸️ Pauses execution here
+    import pdb; pdb.set_trace()  # Pauses execution here
     return result * 2
 
 # Once inside the debugger:
