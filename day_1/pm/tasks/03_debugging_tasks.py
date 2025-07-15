@@ -1,59 +1,78 @@
 """
-04_debugging_task.py
+03_debugging_tools.py
 
-TASK: Debugging with Traceback and PDB
-======================================
+Debugging Scientific Python Code
+================================
 
-You are given a broken scientific function: `weighted_average`.
-
-It currently fails one or more test cases.
-
-Your job:
----------
-1. Run this file to see the traceback errors
-2. Use `pdb` or `print()` to inspect the variables and logic
-3. Fix the bugs in the `weighted_average()` function
-
-Tip:
-- Uncomment the `pdb.set_trace()` line to step through the function
-- Use keyboard commands: n, s, p var, q
+Goals:
+- Learn to identify and investigate bugs using built-in tools
+- Apply three common techniques:
+    1. print() for simple tracing
+    2. traceback for clean stack traces
+    3. pdb for interactive, step-through debugging
 """
 
-# BROKEN FUNCTION
-def weighted_average(values, weights):
-    """Compute the weighted average of a list of values."""
-    if len(values) != len(weights):
-        raise ValueError("Lists must be the same length")
-    total = 0
-    for i in range(len(values)):
-        total += values[i] * weights[i]
-    # import pdb; pdb.set_trace()  # Uncomment this to step through
-    return total / sum(weights)  # May fail if weights sum to 0
+# =======================================================
+# 1. TRACEBACK – Print a full error trace when exceptions happen
+# =======================================================
 
-# TEST CASES
-def test_typical_case():
-    result = weighted_average([1, 2, 3], [1, 1, 1])
-    assert result == 2.0, "Expected simple average"
+def divide(a, b):
+    return a / b   # Will raise ZeroDivisionError if b == 0
 
-def test_with_zero_weights():
+def wrapper():
     try:
-        weighted_average([10, 20], [0, 0])
+        return divide(10, 0)  # This triggers an exception
     except ZeroDivisionError:
-        print("Caught expected ZeroDivisionError (zero total weight)")
-    else:
-        print("Expected ZeroDivisionError not raised")
+        import traceback
+        traceback.print_exc()  #  Prints a clean, formatted traceback
+        # Great for logging errors in scripts or analysis pipelines
 
-def test_mismatched_lengths():
-    try:
-        weighted_average([1, 2, 3], [1, 2])
-    except ValueError:
-        print("Caught expected ValueError (length mismatch)")
-    else:
-        print("Expected ValueError not raised")
 
-# RUN TESTS
+# =======================================================
+# 2. PRINT DEBUGGING – Quick sanity checks inside logic
+# =======================================================
+
+def mean(values):
+    total = sum(values)
+    print(f"DEBUG: total={total}, count={len(values)}")  #  Manual inspection
+    return total / len(values)  #  Will raise ZeroDivisionError if list is empty
+
+# When to use print():
+# - During prototyping
+# - To check assumptions (e.g., inputs, loop counters, early exits)
+# - Avoid for production code — prefer logging
+
+
+# =======================================================
+# 3. PDB – Python Debugger for step-by-step investigation
+# =======================================================
+
+def buggy_calc(x, y):
+    result = x + y
+    import pdb; pdb.set_trace()  # Pauses execution here
+    return result * 2
+
+# Once inside the debugger:
+# ▶ n  → next line
+# ▶ s  → step into a function
+# ▶ p  → print a variable (e.g., p result)
+# ▶ c  → continue execution
+# ▶ q  → quit debugger
+
+
+# =======================================================
+# MAIN SCRIPT EXECUTION – Try all three demos
+# =======================================================
+
 if __name__ == "__main__":
-    print("== RUNNING DEBUGGING TASK ==")
-    test_typical_case()
-    test_with_zero_weights()
-    test_mismatched_lengths()
+    print("== TRACEBACK DEMO ==")
+    #  Should trigger a division-by-zero error with a traceback
+    wrapper()
+
+    print("\n== PRINT DEBUG DEMO ==")
+    #  Will show internal state of 'mean' function
+    print("mean([1, 2, 3]):", mean([1, 2, 3]))
+
+    print("\n== PDB DEBUG DEMO ==")
+    #  Will pause in the terminal — use keyboard commands (p, n, q, etc.)
+    buggy_calc(5, 7)
