@@ -14,26 +14,32 @@ Learning Outcomes:
 
 Instructions:
 -------------
-- Create an abstract base class `Shape`:
+- TODO: Create an abstract base class `Shape`:
     - Abstract methods: area(), perimeter()
-    - __str__ should return the class name
+    - __str__ should return the class name only
 
-- Implement 2 concrete shapes:
-    1. Circle – initialized with radius
-    2. Rectangle – initialized with width and height
+- TODO: Implement the subclass `Circle`:
+    - Initialize with radius
+    - Implement area() and perimeter() using math.pi
 
-- Use math.pi for Circle calculations
-- Demonstrate polymorphic usage with a list of shapes
+- TODO: Implement the subclass `Rectangle`:
+    - Initialize with width and height
+    - Implement area() and perimeter()
+
+- TODO: Demonstrate polymorphic behavior:
+    - Use a loop to iterate over a list of shapes
+    - Call area() and perimeter() on each shape
+    - Display results without type checking
 
 Example Output:
 ---------------
-    Circle
-    Area: 78.54
-    Perimeter: 31.42
+Circle
+Area: 78.54
+Perimeter: 31.42
 
-    Rectangle
-    Area: 24.00
-    Perimeter: 20.00
+Rectangle
+Area: 24.00
+Perimeter: 20.00
 """
 
 import abc
@@ -41,19 +47,22 @@ import math
 
 # === TODO: Define abstract base class Shape ===
 # - Abstract methods: area(), perimeter()
-# - __str__ should return class name only
+# - __str__ returns class name only
 
 
-# === TODO: Subclass – Circle ===
-# - Simulate with radius = 5
-# - Use math.pi for calculations
+# === TODO: Define subclass Circle ===
+# - Initialize with radius
+# - Implement area() and perimeter() using math.pi
 
 
-# === TODO: Subclass – Rectangle ===
-# - Simulate with width = 4, height = 6
+# === TODO: Define subclass Rectangle ===
+# - Initialize with width and height
+# - Implement area() and perimeter()
 
 
-# === TEST YOUR IMPLEMENTATION ===
+# === TODO: Demonstrate polymorphic behavior in a loop ===
+# - Use a loop to display area and perimeter for each shape
+
 if __name__ == "__main__":
     shapes = [
         # Circle(5),
@@ -65,4 +74,3 @@ if __name__ == "__main__":
         print("Area: {:.2f}".format(shape.area()))
         print("Perimeter: {:.2f}".format(shape.perimeter()))
         print()
-

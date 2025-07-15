@@ -8,7 +8,7 @@ Focus:
 ------
 - What is abstraction? Why use Abstract Base Classes (ABCs)?
 - How to use the abc module to define required methods
-- Simple scientific example
+- Simple example
 
 """
 
@@ -23,11 +23,25 @@ import abc
 #   - Forces child classes to implement certain methods
 
 # ---------------------------------------------
-# 2. Example: Measurement ABC
+# 2. What is @abstractmethod?
+# ---------------------------------------------
+# An @abstractmethod marks a method that MUST be implemented by any subclass.
+# The method is defined in the abstract base class (ABC) without a real body.
+
+# - Any class inheriting from Shape MUST define its own area() method.
+# - If it doesn't, Python will raise a TypeError when you try to instantiate it.
+#
+# Why use @abstractmethod?
+#   - Enforces a shared contract between all subclasses.
+#   - Prevents incomplete implementations.
+#   - Supports polymorphism: every subclass will have those methods.
+
+# ---------------------------------------------
+# 3. Example: Measurement ABC
 # ---------------------------------------------
 
 class Measurement(abc.ABC):
-    """Abstract Base Class for scientific measurements."""
+    """Abstract Base Class for measurements."""
 
     @abc.abstractmethod
     def value(self):
@@ -40,7 +54,7 @@ class Measurement(abc.ABC):
         pass
 
 # ---------------------------------------------
-# 3. Implementing a Concrete Class
+# 4. Implementing a Concrete Class
 # ---------------------------------------------
 
 class TemperatureMeasurement(Measurement):
@@ -54,7 +68,7 @@ class TemperatureMeasurement(Measurement):
         return "°C"
 
 # ---------------------------------------------
-# 4. Usage
+# 5. Usage
 # ---------------------------------------------
 
 if __name__ == "__main__":
@@ -67,6 +81,6 @@ if __name__ == "__main__":
 # ---------------------------------------------
 # 5. Best Practices
 # ---------------------------------------------
-# - Use ABCs to define a shared protocol: scientists can build their own models by subclassing MathematicalModel.
-# - Each model can be used in fitting, plotting, simulation, or experimental prediction—just call .evaluate(x)!
-# - For more complex models, simply require more methods (e.g., "derivative", "parameters", etc.).
+# - Use ABCs to define a shared protocol: you can build your own models by subclassing MathematicalModel.
+# - Each model can be used in fitting, plotting, simulation, or experimental prediction, just call .evaluate(x)!
+# - For more complex models, add more methods (e.g., "derivative", "parameters", etc.).
