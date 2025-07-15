@@ -29,6 +29,7 @@ Notes:
 
 import sys
 
+
 # =======================================================
 # 1. ARGPARSE EXAMPLE – F = m * a
 # =======================================================
@@ -50,6 +51,7 @@ def run_argparse():
 # 2. CLICK EXAMPLE – Ohm's Law: V = I * R
 # =======================================================
 
+# ...
 def run_click():
     import click
 
@@ -60,24 +62,28 @@ def run_click():
         voltage = current * resistance
         print(f"[Click] Voltage = {voltage:.2f} V")
 
-    solve(standalone_mode=False)
+    solve(args=sys.argv[2:], standalone_mode=False)
 
 
 # =======================================================
 # 3. TYPER EXAMPLE – Kinetic Energy: KE = 0.5 * m * v^2
 # =======================================================
 
-def run_typer():
-    import typer
+import sys
+import typer
 
+def run_typer():
     app = typer.Typer()
 
     @app.command()
-    def solve(mass: float, velocity: float):
-        ke = 0.5 * mass * velocity**2
+    def solve(
+        mass: float = typer.Option(..., "--mass", "-m", help="Mass in kg"),
+        velocity: float = typer.Option(..., "--velocity", "-v", help="Velocity in m/s"),
+    ):
+        ke = 0.5 * mass * velocity ** 2
         typer.echo(f"[Typer] Kinetic Energy = {ke:.2f} J")
 
-    app(prog_name="typer", args=sys.argv[2:])  # Skip script name and 'typer' arg
+    app(prog_name="typer", args=sys.argv[3:])
 
 
 # =======================================================
