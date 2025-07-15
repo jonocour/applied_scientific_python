@@ -1,30 +1,29 @@
 """
 TASK 02 – Inheritance with Data File Parsers
 =============================================
-
 Goal:
 -----
 Use inheritance to represent different types of data files that all share a common interface.
 
 Learning Outcomes:
 ------------------
-Build a logical class hierarchy using inheritance
-Override methods for specialized behavior
-Demonstrate polymorphism via shared interface
+- Build a logical class hierarchy using inheritance
+- Override methods for specialized behavior
+- Demonstrate polymorphism via shared interface
 
 Instructions:
 -------------
-- Create an abstract base class `DataFile`:
+- Create a base class `DataFile`:
     - Attribute: filename
-    - Abstract method: parse() → returns summary string
-    - __str__ should return the filename and type
+    - Method: parse() → returns summary string (can be overridden)
+    - __str__ should return "<ClassName>: filename"
 
 - Implement 3 subclasses:
-    1. CSVFile – returns number of rows and columns
-    2. JSONFile – returns number of keys at the top level
-    3. XMLFile – returns number of tags found (simulate it!)
+    1. CSVFile – returns "10 rows, 3 columns"
+    2. JSONFile – returns "5 top-level keys"
+    3. XMLFile – returns "12 tags"
 
-- You don’t need real file I/O — just simulate the behavior with dummy values.
+- You don’t need real file I/O — simulate with dummy values.
 
 Example Output:
 ---------------
@@ -37,8 +36,9 @@ import abc
 
 # === TODO: Define abstract base class DataFile ===
 # - Attribute: filename
-# - Method: parse() → abstract
-# - __str__ should show "<ClassName>: filename"
+# - Method: parse() → default implementation
+# - __str__ shows "<ClassName>: filename"
+
 
 
 # === TODO: Subclass – CSVFile ===
