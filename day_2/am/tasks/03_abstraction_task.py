@@ -39,30 +39,57 @@ Example Output:
 import abc
 import math
 
-# === TODO: Define abstract base class Shape ===
-# - Abstract methods: area(), perimeter()
-# - __str__ should return class name only
+# === Define abstract base class Shape ===
+class Shape(abc.ABC):
+    @abc.abstractmethod
+    def area(self):
+        """Return the area of the shape."""
+        pass
+
+    @abc.abstractmethod
+    def perimeter(self):
+        """Return the perimeter (or circumference) of the shape."""
+        pass
+
+    def __str__(self):
+        # Return just the class name
+        return self.__class__.__name__
 
 
-# === TODO: Subclass – Circle ===
-# - Simulate with radius = 5
-# - Use math.pi for calculations
+# === Define subclass – Circle ===
+class Circle(Shape):
+    def __init__(self, radius):
+        self.radius = radius
+
+    def area(self):
+        return math.pi * self.radius ** 2
+
+    def perimeter(self):
+        return 2 * math.pi * self.radius
 
 
-# === TODO: Subclass – Rectangle ===
-# - Simulate with width = 4, height = 6
+# === Define subclass – Rectangle ===
+class Rectangle(Shape):
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+
+    def area(self):
+        return self.width * self.height
+
+    def perimeter(self):
+        return 2 * (self.width + self.height)
 
 
 # === TEST YOUR IMPLEMENTATION ===
 if __name__ == "__main__":
     shapes = [
-        # Circle(5),
-        # Rectangle(4, 6)
+        Circle(5),
+        Rectangle(4, 6)
     ]
 
     for shape in shapes:
         print(shape)
-        print("Area: {:.2f}".format(shape.area()))
+        print("Area:      {:.2f}".format(shape.area()))
         print("Perimeter: {:.2f}".format(shape.perimeter()))
         print()
-

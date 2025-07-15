@@ -19,34 +19,55 @@ Example:
     print(earth.surface_gravity()) ➞ ~9.81 m/s²
 """
 
-
 class Planet:
-    # TODO: Define __init__ with name, mass (kg), radius (km)
-    pass
+    # Gravitational constant in m^3 / (kg s^2)
+    G = 6.67430e-11
 
-    # TODO: Define summary() method to describe the planet
-    pass
+    def __init__(self, name: str, mass: float, radius_km: float):
+        """Initialize a planet with a name, mass (kg), and radius (km)."""
+        self.name = name
+        self.mass = mass
+        self.radius_km = radius_km
 
-    # TODO: Define surface_gravity() using the formula: G * M / R^2
-    # Convert radius to meters inside the method
-    pass
+    def summary(self) -> str:
+        """Return a one‑line summary of this planet."""
+        return f"Planet {self.name}: {self.mass:.3e} kg, {self.radius_km} km radius"
 
-    # CHALLENGE:
-    # TODO: Override __add__ so adding two Planet objects returns a new Planet
-    # - Name: "CombinedPlanet"
-    # - Mass: sum of both masses
-    # - Radius: sum of both radii
-    pass
+    def surface_gravity(self) -> float:
+        """
+        Compute surface gravity (m/s^2) via
+            g = G * M / R^2
+        where R is in meters.
+        """
+        radius_m = self.radius_km * 1_000  # km → m
+        return Planet.G * self.mass / (radius_m ** 2)
+
+    def __add__(self, other):
+        """
+        Define how to 'add' two Planets:
+          - New name is "CombinedPlanet"
+          - Mass and radius are summed
+        """
+        if not isinstance(other, Planet):
+            return NotImplemented
+        return Planet(
+            name="CombinedPlanet",
+            mass=self.mass + other.mass,
+            radius_km=self.radius_km + other.radius_km
+        )
+
 
 # === TEST YOUR IMPLEMENTATION ===
-
-
 if __name__ == "__main__":
     earth = Planet("Earth", mass=5.972e24, radius_km=6371)
-    mars = Planet("Mars", mass=6.417e23, radius_km=3389.5)
-    marth = earth + mars # in an IDE, this + is flagged (it will complain we haven't implemented __add__
+    mars  = Planet("Mars",  mass=6.417e23, radius_km=3389.5)
+    marth = earth + mars  # uses our __add__
+
     print(earth.summary())
-    print("Gravity:", earth.surface_gravity(), "m/s²")
+    print("Gravity:", earth.surface_gravity(), "m/s²\n")
 
     print(mars.summary())
-    print("Gravity:", mars.surface_gravity(), "m/s²")
+    print("Gravity:", mars.surface_gravity(), "m/s²\n")
+
+    print(marth.summary())
+    print("Gravity:", marth.surface_gravity(), "m/s²")

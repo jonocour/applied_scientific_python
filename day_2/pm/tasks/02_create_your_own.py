@@ -1,111 +1,58 @@
 """
-TASK 02 – Build Your Own Scientific CLI Tool (Argparse)
-=======================================================
+02_create_your_own_argparse_task.py
+===================================
 
-Goal:
------
-Practice creating your own command-line interface using **argparse** for a basic calculation.
+Build Your Own Scientific CLI Tool (Argparse)
 
-Instructions:
--------------
-You will:
-1. Define a function: `pressure(force, area)`
-2. Wrap it in a CLI using **argparse**
-3. Run the tool from the terminal with custom parameters
-
-Part 1 – The Function
----------------------
-Define a function that computes pressure using:
-    pressure = force / area
-
-Include error handling:
-- Raise ValueError if area is zero or negative
-
-Part 2 – CLI Tool
------------------
-- Use argparse to let users specify:
-    --force  (float)
-    --area   (float)
-
-- Parse the arguments, call the `pressure()` function, and print the result nicely
-
-How to test (once implemented):
--------------------------------
-    $ python 02_create_your_own_argparse_task.py --force 100 --area 5
-
-Expected output example:
-------------------------
-    Pressure = 20.00 Pascals (Pa)
-
-Optional:
----------
-- Format result with scientific notation if appropriate
-- Add input validation for negative force
+Usage:
+    python 02_create_your_own_argparse_task.py --force 100 --area 5
 """
 
-# === TODO: Define a function called `pressure(force, area)` ===
-# It should return force / area, and raise an error if area <= 0
+import argparse
+import sys
 
-
-# === TODO: Use argparse.ArgumentParser to set up CLI arguments for --force and --area
-# Call the pressure() function with the parsed arguments and print the result
-
-
-# === Example stub (edit or delete as needed) ===
+# === Part 1: The Function ===
 def pressure(force, area):
+    """Compute pressure = force / area, with error checks."""
     if area <= 0:
         raise ValueError("Area must be greater than zero.")
+    if force < 0:
+        raise ValueError("Force must be non-negative.")
     return force / area
 
 
-# === TODO: Implement your CLI entry point below ===
-# Hint: Use argparse.ArgumentParser(description="...")
-#       Add --force and --area as required arguments with type=float
-#       Call the pressure() function and print the result formatted nicely
+# === Part 2: CLI Entry Point ===
+def main():
+    parser = argparse.ArgumentParser(
+        description="Calculate pressure using P = force / area"
+    )
+    parser.add_argument(
+        "--force", "-f",
+        type=float,
+        required=True,
+        help="Force in Newtons (N)"
+    )
+    parser.add_argument(
+        "--area", "-a",
+        type=float,
+        required=True,
+        help="Area in square meters (m²)"
+    )
+
+    args = parser.parse_args()
+
+    try:
+        p = pressure(args.force, args.area)
+    except ValueError as e:
+        parser.error(str(e))
+
+    if abs(p) >= 1e4 or (abs(p) > 0 and abs(p) < 1e-2):
+        out = f"{p:.2e}"
+    else:
+        out = f"{p:.2f}"
+
+    print(f"Pressure = {out} Pascals (Pa)")
 
 
-# === TEST YOUR TOOL ===
-# if __name__ == "__main__":
-#     Run your CLI tool here
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# =======================================================
-# Further Reading – Scientific Packages for Pressure
-# =======================================================
-# These libraries go beyond basic pressure = force / area:
-
-# 1. pint
-#    - Handles units and conversions for pressure (Pa, bar, atm)
-#    - Example: (100 * ureg.newton) / (2 * ureg.square_meter)
-
-# 2. scipy.constants
-#    - Provides constants like atmosphere, Pascal, etc.
-#    - Useful for scientific accuracy and conversions
-
-# These are optional but great for advanced work!
-# =======================================================
+if __name__ == "__main__":
+    main()
