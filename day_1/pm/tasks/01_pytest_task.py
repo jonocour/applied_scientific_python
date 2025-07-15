@@ -8,6 +8,7 @@ Task:
 - Run with:
     $ pytest -v 01_pytest_task.py
 """
+import pytest
 
 def normalize(values):
     """Return a list of values scaled to sum to 1."""
@@ -17,13 +18,30 @@ def normalize(values):
     return [v / total for v in values]
 
 # === TESTS ===
-# TODO: Add a basic test to check that [1, 1, 2] normalizes to [0.25, 0.25, 0.5]
 
-# TODO: Add a test for an input with one number only
+def test_normalize_basic():
+    """[1,1,2] → [0.25, 0.25, 0.5]"""
+    assert normalize([1, 1, 2]) == [0.25, 0.25, 0.5]
 
-# TODO: Add a test to check if ValueError is raised when input is []
+def test_normalize_single():
+    """A single value [5] → [1.0]"""
+    assert normalize([5]) == [1.0]
 
-# TODO: BONUS – Use pytest.mark.parametrize to test 3 different input-output cases
+def test_normalize_empty():
+    """Empty input should raise ValueError."""
+    with pytest.raises(ValueError):
+        normalize([])
+
+@pytest.mark.parametrize("input_vals, expected", [
+    ([2, 2, 6], [0.2, 0.2, 0.6]),
+    ([0, 5, 5], [0.0, 0.5, 0.5]),
+    ([10, 10],   [0.5, 0.5]),
+])
+def test_normalize_parametrized(input_vals, expected):
+    """Parametrized tests for multiple input/output pairs."""
+    result = normalize(input_vals)
+    # Use approx for float-comparison safety
+    assert result == pytest.approx(expected)
 
 # === SAMPLE RUN ===
 if __name__ == "__main__":

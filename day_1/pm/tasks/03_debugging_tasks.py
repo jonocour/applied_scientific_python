@@ -1,5 +1,5 @@
 """
-04_debugging_task.py
+03_debugging_task.py
 
 TASK: Debugging with Traceback and PDB
 ======================================
@@ -19,21 +19,27 @@ Tip:
 - Use keyboard commands: n, s, p var, q
 """
 
-# BROKEN FUNCTION
 def weighted_average(values, weights):
-    """Compute the weighted average of a list of values."""
+    """Compute the weighted average of a list of values, without using zip."""
     if len(values) != len(weights):
         raise ValueError("Lists must be the same length")
-    total = 0
+
+    total_weight = sum(weights)
+    if total_weight == 0:
+        raise ZeroDivisionError("Sum of weights must not be zero.")
+
+    weighted_sum = 0.0
     for i in range(len(values)):
-        total += values[i] * weights[i]
-    # import pdb; pdb.set_trace()  # Uncomment this to step through
-    return total / sum(weights)  # May fail if weights sum to 0
+        weighted_sum += values[i] * weights[i]
+
+    return weighted_sum / total_weight
+
 
 # TEST CASES
 def test_typical_case():
     result = weighted_average([1, 2, 3], [1, 1, 1])
     assert result == 2.0, "Expected simple average"
+
 
 def test_with_zero_weights():
     try:
@@ -43,6 +49,7 @@ def test_with_zero_weights():
     else:
         print("Expected ZeroDivisionError not raised")
 
+
 def test_mismatched_lengths():
     try:
         weighted_average([1, 2, 3], [1, 2])
@@ -50,6 +57,7 @@ def test_mismatched_lengths():
         print("Caught expected ValueError (length mismatch)")
     else:
         print("Expected ValueError not raised")
+
 
 # RUN TESTS
 if __name__ == "__main__":
