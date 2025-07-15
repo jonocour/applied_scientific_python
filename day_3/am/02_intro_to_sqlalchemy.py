@@ -1,95 +1,58 @@
-"""
-02_intro_to_orm_sqlalchemy.py
-=============================
+from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, Float, select
 
-Intro to SQLAlchemy ORM for Scientific Data
--------------------------------------------
+# 1. Setup: Engine and Metadata
+# engine = create_engine("sqlite:///viscosity_tests.db", echo=True) - exists as a .db file
+engine = create_engine("sqlite:///:memory:", echo=True) # exists "in-memory", deleted after run
+metadata = MetaData()
 
-This script shows how to manage database sessions in SQLAlchemy,
-comparing the older custom context manager approach (pre-v1.4)
-to the built-in context-manager support introduced in v1.4.
+# 2. Define the table using SQLAlchemy Core (no ORM models)
+viscosity_tests = Table(
+    "viscosity_tests",
+    metadata,
+    Column("id", Integer, primary_key=True, autoincrement=True),
+    Column("fluid", String, nullable=False),
+    Column("temperature", Float, nullable=False),  # °C
+    Column("viscosity", Float, nullable=False)     # Pa·s
+)
 
-"""
+# 3. Create the table
+metadata.create_all(engine)
 
-from sqlalchemy import create_engine, Column, Integer, String, Float
-from sqlalchemy.orm import declarative_base, sessionmaker
+# 4. Perform CRUD inside a connection block
+with engine.connect() as connection:
+    # CREATE — Insert records
+    connection.execute(
+        viscosity_tests.insert(),
+        [
+            {"fluid": "Water", "temperature": 20.0, "viscosity": 0.001002},
+            {"fluid": "Glycerin", "temperature": 20.0, "viscosity": 1.412}
+        ]
+    )
+    print("Records inserted!")
 
-# ----------------------------------------------------
-# 1. SETUP
-# ----------------------------------------------------
+    # READ — Select all records
+    result = connection.execute(select(viscosity_tests))
+    print("\nAll records:")
+    for row in result:
+        print(row)
 
-# Change to "sqlite:///:memory:" to use an in-memory database for testing
-engine = create_engine("sqlite:///materials.db", echo=True)
-Base = declarative_base()
+    # UPDATE — Change Water's viscosity
+    connection.execute(
+        viscosity_tests.update()
+        .where(viscosity_tests.c.fluid == "Water")
+        .values(viscosity=0.00103)
+    )
+    print("Record updated!")
 
-class Material(Base):
-    __tablename__ = "aero_materials"
-    id = Column(Integer, primary_key=True)
-    name = Column(String, nullable=False)
-    yield_strength = Column(Float)  # Measured in MPa
+    # DELETE — Remove Glycerin
+    connection.execute(
+        viscosity_tests.delete()
+        .where(viscosity_tests.c.fluid == "Glycerin")
+    )
+    print("Record deleted!")
 
-    def __repr__(self):
-        return f"<Material(name={self.name!r}, yield_strength={self.yield_strength} MPa)>"
-
-# Create table if it doesn't exist
-Base.metadata.create_all(engine)
-
-# ----------------------------------------------------
-# 2. SESSION MANAGEMENT OPTIONS
-# ----------------------------------------------------
-
-Session = sessionmaker(bind=engine)
-
-# --- Option A: Custom context manager (pre-SQLAlchemy 1.4) ---
-#
-# In versions before 1.4, Session did not support `with` directly.
-# You needed to wrap session creation and teardown yourself:
-#
-# from contextlib import contextmanager
-#
-# @contextmanager
-# def session_scope():
-#     """Provide a transactional scope around a series of operations."""
-#     session = Session()          # create a new Session
-#     try:
-#         yield session            # run work in this block
-#         session.commit()         # commit if no errors
-#     except:
-#         session.rollback()       # rollback on error
-#         raise
-#     finally:
-#         session.close()          # always close
-#
-# Starting in SQLAlchemy 1.4, the Session returned by sessionmaker()
-# implements __enter__ and __exit__, so you can use `with` directly:
-#
-# - On normal exit: commits transaction and closes session
-# - On exception: rolls back transaction and closes session
-
-# ----------------------------------------------------
-# 3. DEMO CRUD within the built-in context manager
-# ----------------------------------------------------
-
-with Session() as session:
-    # CREATE
-    session.add(Material(name="Inconel 718", yield_strength=1030))
-    # No explicit session.commit() needed here; commit happens on block exit
-
-    # READ
-    print("\nStored Materials:")
-    for mat in session.query(Material).all():
-        print(mat)
-
-    # UPDATE
-    mat = session.query(Material).filter_by(name="Inconel 718").first()
-    if mat:
-        mat.yield_strength = 1050
-        # change is tracked; committed automatically
-
-    # DELETE
-    mat = session.query(Material).filter_by(name="Inconel 718").first()
-    if mat:
-        session.delete(mat)
-        # deletion is tracked; committed automatically
-
-# After this block, session is closed even if an error occurred.
+    # Final check — Select remaining records
+    result = connection.execute(select(viscosity_tests))
+    print("\nFinal records:")
+    for row in result:
+        print(row)
