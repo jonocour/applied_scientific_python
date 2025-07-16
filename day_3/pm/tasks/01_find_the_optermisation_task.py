@@ -24,25 +24,13 @@ Try setting num_experiments = 100 to exaggerate the performance cost.
 
 from sqlalchemy import create_engine, Column, Integer, Float, String, ForeignKey
 from sqlalchemy.orm import declarative_base, relationship, Session
+
+from day_3.pm.utility.model_for_optermisation import Experiment, Measurement
+
 # === TODO: Add any loading strategy imports you may want to try ===
 # e.g., from sqlalchemy.orm import joinedload
 
 Base = declarative_base()
-
-class Experiment(Base):
-    __tablename__ = "experiments"
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
-    measurements = relationship("Measurement", back_populates="experiment")
-
-
-class Measurement(Base):
-    __tablename__ = "measurements"
-    id = Column(Integer, primary_key=True)
-    experiment_id = Column(Integer, ForeignKey("experiments.id"))
-    value = Column(Float)
-    experiment = relationship("Experiment", back_populates="measurements")
-
 
 # ---------------------------------------------
 # SEED SAMPLE DATA

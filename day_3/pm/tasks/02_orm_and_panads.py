@@ -7,6 +7,7 @@ Goal:
 - Query data using SQLAlchemy ORM
 - Convert ORM results into a Pandas DataFrame
 - Filter, flag, and group data using Pandas
+- Understand how ORM and Pandas can compliment each other.
 
 Scenario:
 ---------
@@ -52,8 +53,11 @@ def orm_to_dataframe(session):
         - value (float)
     """
     # TODO: Query all Measurement records
+    # session.query(Measurement.value, Experiment.name)
     # TODO: Build a list of dicts with keys: 'experiment', 'value'
     # TODO: Convert list to a Pandas DataFrame
+    # Convert list to a Pandas DataFrame
+    # df = pd.DataFrame(data)
     pass
 
 

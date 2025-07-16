@@ -1,5 +1,5 @@
 """
-02_intro_to_pandas.py
+02_intro_to_pandas_cleaning.py
 ===========================
 
 Intro to Pandas: Clean and Analyze Scientific Data
@@ -10,6 +10,10 @@ Topics:
 - Load tabular data into a DataFrame
 - Filter, group, and transform with vectorized operations
 - Compare naive `.apply()` with better Pandas idioms
+- Sort and rank data with `.sort_values()`
+- Merge datasets with `pd.merge()`
+- Reshape and aggregate with `.pivot_table()`
+
 
 Run:
 ----
@@ -51,6 +55,35 @@ print("\nGrouped stats per experiment:\n", grouped)
 # Good: vectorized boolean operation
 df["flagged"] = df["value"] < 0.15
 print("\nWith flagged column:\n", df)
+
+# ---------------------------------------------
+# Step 5: Sorting values (by descending value)
+# ---------------------------------------------
+sorted_df = df.sort_values("value", ascending=False)
+print("\nSorted by value (descending):\n", sorted_df)
+
+# ---------------------------------------------
+# Step 6: Merging with another DataFrame
+# ---------------------------------------------
+# Create a synthetic lookup table for sample metadata
+meta_data = pd.DataFrame({
+    "sample_id": [101, 102, 103, 104, 105, 106, 107],
+    "type": ["A", "A", "B", "B", "C", "C", "C"],
+})
+
+merged_df = pd.merge(df, meta_data, on="sample_id")
+print("\nMerged DataFrame with metadata:\n", merged_df)
+
+# ---------------------------------------------
+# Step 7: Pivot Table (average value per experiment and type)
+# ---------------------------------------------
+pivot = merged_df.pivot_table(
+    index="experiment",
+    columns="type",
+    values="value",
+    aggfunc="mean"
+)
+print("\nPivot Table (mean value per experiment and type):\n", pivot)
 
 # ---------------------------------------------
 # Optional: Export to CSV or Excel
