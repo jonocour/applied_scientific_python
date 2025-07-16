@@ -28,6 +28,14 @@ Expected Improvements:
 
 # === TODO: Add required imports (time, pandas, numpy, math, etc.) ===
 from day_3.pm.utility.model_for_optermisation import Experiment, Measurement, Base
+import time
+import math
+import pandas as pd
+import numpy as np
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session
+from day_3.pm.utility.model_for_optermisation import Experiment, Measurement, Base
+
 
 # ---------------------------------------------
 # Provided: Seed 10,000 measurements into the database
@@ -40,37 +48,42 @@ def setup(session):
     session.commit()
 
 
-# === TODO 1: Query all measurements from ORM ===
+# ---------------------------------------------
+# BAD EXAMPLE — Slow ORM Query & Python Loop
+# ---------------------------------------------
 def get_measurements(session):
-    """
-    Return a list of Measurement ORM objects.
-    BAD PRACTICE:
-    - Loads full ORM objects into memory.
-    - Inefficient for large datasets.
-
-    TODO: Replace with a query that selects only 'value' as a list or uses batching.
-    """
     return session.query(Measurement).all()
 
 
-# === TODO 2: Compute log10 of each value using a for-loop (baseline) ===
 def slow_log(measurements):
-    """
-    Compute log10 of each measurement using a slow Python loop.
-
-    BAD PRACTICE:
-    - Loops over each ORM object.
-    - Uses math.log10() in pure Python.
-
-    TODO: Replace with vectorized NumPy or Pandas computation after ORM query refactor.
-    """
     results = []
     for m in measurements:
         results.append(math.log10(m.value))
     return results
 
 
-# === MAIN WORKFLOW ===
+# ---------------------------------------------
+# GOOD EXAMPLE — Efficient Vectorized Approach
+# ---------------------------------------------
+def get_measurements_as_dataframe(session):
+    """
+    Query only required fields and load into a DataFrame.
+    """
+    results = session.query(Measurement.value).all()
+    values = [v[0] for v in results]  # Extract tuples into list
+    return pd.DataFrame({"value": values})
+
+
+def vectorized_log(df):
+    """
+    Use NumPy log10 on entire column — super fast.
+    """
+    df["log_value"] = np.log10(df["value"])
+    return df
+
+# ---------------------------------------------
+# MAIN WORKFLOW
+# ---------------------------------------------
 if __name__ == "__main__":
     engine = create_engine("sqlite:///:memory:")
     Base.metadata.create_all(engine)
@@ -78,13 +91,22 @@ if __name__ == "__main__":
 
     setup(session)
 
+    # --- BAD WAY ---
     print("\n--- Running Slow Loop Version ---")
+    bad_start = time.time()
     measurements = get_measurements(session)
-
-    start = time.time()
     slow_results = slow_log(measurements)
-    print(f"Slow loop took {time.time() - start:.4f} sec")
+    bad_time = time.time() - bad_start
+    print(f"Slow loop took {bad_time:.4f} sec")
 
-    # === TODO 4: Refactor using Pandas or NumPy ===
-    # Using time in the main runner above, compare your improvements with the originals
-    # Remember a raise in complexity isn't necessarliy accsicated with a rasie in computation
+    # --- GOOD WAY ---
+    print("\n--- Running Vectorized Pandas Version ---")
+    good_start = time.time()
+    df = get_measurements_as_dataframe(session)
+    df = vectorized_log(df)
+    good_time = time.time() - good_start
+    print(f"Vectorized version took {good_time:.4f} sec")
+
+    # --- Compare Performance ---
+    speedup = bad_time / good_time if good_time > 0 else float('inf')
+    print(f"\nVectorized approach is {speedup:.2f}x faster than the looped version.")

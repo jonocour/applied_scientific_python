@@ -21,16 +21,9 @@ Advanced:
 ---------
 Try setting num_experiments = 100 to exaggerate the performance cost.
 """
-
-from sqlalchemy import create_engine, Column, Integer, Float, String, ForeignKey
-from sqlalchemy.orm import declarative_base, relationship, Session
-
-from day_3.pm.utility.model_for_optermisation import Experiment, Measurement
-
-# === TODO: Add any loading strategy imports you may want to try ===
-# e.g., from sqlalchemy.orm import joinedload
-
-Base = declarative_base()
+from sqlalchemy import create_engine
+from sqlalchemy.orm import declarative_base, Session, selectinload
+from day_3.pm.utility.model_for_optermisation import Experiment, Measurement, Base
 
 # ---------------------------------------------
 # SEED SAMPLE DATA
@@ -44,39 +37,32 @@ def setup_data(session, num_experiments=5):
 
 
 # ---------------------------------------------
-# NAIVE VERSION (N+1 Problem)
+# FIXED VERSION — Using selectinload() to avoid N+1
 # ---------------------------------------------
 def print_experiment_measurements(session):
     """
     Print number of measurements for each experiment.
-
-    === TODO: Refactor this query to avoid N+1 issue ===
-    - Add a loading strategy to preload measurements
-    - Confirm only 1 or 2 queries are issued (not N+1)
+    This version preloads related measurements to avoid N+1 queries.
     """
-    experiments = session.query(Experiment).all()  # TODO: Add .options(...) here
+    experiments = session.query(Experiment)\
+                         .options(selectinload(Experiment.measurements))\
+                         .all()
 
     for exp in experiments:
         print(f"{exp.name} has {len(exp.measurements)} measurements")
 
 
 # ---------------------------------------------
-# MAIN
+# MAIN WORKFLOW
 # ---------------------------------------------
 if __name__ == "__main__":
-    # === TODO: Set echo=True to see SQL queries ===
+    # SQL echo enabled to see queries issued
     engine = create_engine("sqlite:///:memory:", echo=True)
     Base.metadata.create_all(engine)
     session = Session(engine)
 
-    # === TODO: Try setting this to 100 to simulate larger datasets ===
+    # Try increasing this to 100 for advanced testing
     setup_data(session, num_experiments=5)
 
-    print("\n--- Running original version (watch for N+1 queries!) ---")
+    print("\n--- Running with selectinload() (should avoid N+1 queries) ---")
     print_experiment_measurements(session)
-
-    # === TODO: After fixing print_experiment_measurements, rerun and verify ===
-    #
-    # Bonus:
-    # - Try timing both versions
-    # - Compare with both selectinload() and joinedload()

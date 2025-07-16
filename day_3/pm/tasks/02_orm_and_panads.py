@@ -32,6 +32,7 @@ from sqlalchemy.orm import Session
 
 from day_3.pm.utility.model_for_optermisation import Experiment, Measurement, Base
 
+
 # ---------------------------------------------
 # Provided: Seed data into in-memory SQLite
 # ---------------------------------------------
@@ -45,20 +46,20 @@ def setup(session):
     session.commit()
 
 
-# === TODO 1: Query ORM and return a DataFrame ===
+# ---------------------------------------------
+# Query ORM and return a DataFrame
+# ---------------------------------------------
 def orm_to_dataframe(session):
     """
-    Return a DataFrame with columns:
-        - experiment (name)
-        - value (float)
+    Query all measurements with their experiment names,
+    and return a DataFrame with columns 'experiment' and 'value'.
     """
-    # TODO: Query all Measurement records
-    # session.query(Measurement.value, Experiment.name)
-    # TODO: Build a list of dicts with keys: 'experiment', 'value'
-    # TODO: Convert list to a Pandas DataFrame
-    # Convert list to a Pandas DataFrame
-    # df = pd.DataFrame(data)
-    pass
+    results = session.query(Experiment.name, Measurement.value) \
+        .join(Measurement).all()
+
+    data = [{"experiment": exp_name, "value": val} for exp_name, val in results]
+
+    return pd.DataFrame(data)
 
 
 # === MAIN WORKFLOW ===
@@ -70,17 +71,24 @@ if __name__ == "__main__":
     setup(session)
 
     # === TODO 2: Load ORM data into DataFrame ===
-    # df = ...
+
+    df = orm_to_dataframe(session)
+    print("\n--- Raw Data ---\n", df)
 
     # === TODO 3: Filter out values below 0.1 ===
-    # df = ...
+
+    df = df[df["value"] >= 0.1]
+    print("\n--- After Filtering (value >= 0.1) ---\n", df)
 
     # === TODO 4: Add 'flagged' column for values > 0.5 ===
-    # df["flagged"] = ...
+
+    df["flagged"] = df["value"] > 0.5
+    print("\n--- With 'flagged' Column (value > 0.5) ---\n", df)
 
     # === TODO 5: Group by experiment and compute count + mean ===
-    # grouped = ...
+
+    grouped = df.groupby("experiment")["value"].agg(["count", "mean"])
 
     # === TODO 6: Print cleaned DataFrame and summary ===
-    # print(df)
-    # print(grouped)
+
+    print("\n--- Grouped Summary (Count & Mean) ---\n", grouped)
