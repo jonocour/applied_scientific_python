@@ -116,5 +116,4 @@ Add a downstream CI job that:
 ## Reminder
 
 - Store your **Twine credentials** securely in **CI/CD variables** or **GitHub Secrets**  
-- Use **TestPyPI** for dry-run uploads before pushing to production PyPI  
-
+- Use **TestPyPI** for dry-run uploads before pushing to production PyPI
