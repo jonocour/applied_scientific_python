@@ -1,46 +1,83 @@
-TASK 06 – Installation Strategy Comparison
+TASK 02 – Installation Strategy Comparison
 ==========================================
 
 Goal:
 -----
 Compare editable installation vs locked-environment installation and verify identical outcomes.
 
+Why this matters:
+-----------------
+- Editable installs are useful for active development.
+- Locked-environment installs ensure consistency and reproducibility.
+- This task will help you understand how and when to use each strategy.
+
 Instructions:
 -------------
-Complete the TODOs below:
 
+Important:
+----------
+Activate a fresh virtual environment for each method.  
+Use `deactivate` between installs to prevent cross-contamination.
+
+Method A — Editable Install
+---------------------------
 ```bash
-# Method A: Editable install
-# TODO: Create and activate venvA
-python -m venv venvA && source venvA/bin/activate
-# TODO: Install project in editable mode
+# Create and activate venvA
+python -m venv venvA
+source venvA/bin/activate
+
+# Install dependencies and the project in editable mode
+pip install --upgrade pip
 pip install -r requirements.txt
 pip install -e .
-```
 
-```bash
-# Method B: Locked-environment install
-# TODO: Export locked environment to environment.lock.txt
-# e.g., conda env export > environment.lock.txt
-python -m venv venvB && source venvB/bin/activate
-pip install --upgrade pip
-# TODO: Install using locked requirements
-pip install -r environment.lock.txt
-```
-
-```bash
-# TODO: In each venv, run version check
+# Run version check
 python - <<EOF
 import mypkg
-print("Version:", mypkg.__version__)
+print("Version (Editable Install):", mypkg.__version__)
 EOF
+
+# Deactivate environment
+deactivate
 ```
 
-- TODO: Verify both environments print the same version and import correctly.
+Method B — Locked-Environment Install
+-------------------------------------
+```bash
+# Export exact installed packages from Method A
+pip freeze > environment.lock.txt
+
+# Create and activate venvB
+python -m venv venvB
+source venvB/bin/activate
+
+# Install using the locked requirements
+pip install --upgrade pip
+pip install -r environment.lock.txt
+
+# Run version check
+python - <<EOF
+import mypkg
+print("Version (Locked Install):", mypkg.__version__)
+EOF
+
+# Deactivate environment
+deactivate
+```
+
+Verification:
+-------------
+- Both environments should report the same version number.
+- Confirm that both installs import your package correctly.
 
 Hint:
 -----
 Use virtual environments to isolate and prevent cross-contamination.
+
+Reflection:
+-----------
+- What happens if you edit a source file after Method A’s install?  
+- Does Method B pick up that change? Why or why not?
 
 Advanced:
 ---------

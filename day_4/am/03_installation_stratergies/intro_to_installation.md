@@ -1,8 +1,14 @@
-
 # Installing Python Packages from Git Repositories
 
 This guide explains how to install Python packages directly from GitLab or GitHub using `pip`.  
 Supports versioned, branch-based, and commit-specific installations.
+
+---
+
+## Prerequisites
+
+- You must have **Git installed** on your system — `pip` uses it to clone repositories.
+- The repository must have a valid Python package structure (typically includes `setup.py` or `pyproject.toml`).
 
 ---
 
@@ -63,7 +69,7 @@ pip install git+https://<token>@gitlab.com/PTR/private-repo.git
 Using SSH:
 
 ```bash
-pip install git+ssh://git@gitlab.com/PTR/private-repo.git
+pip install git+ssh://git@gitlab.com/username/repo.git
 ```
 
 ---
@@ -78,7 +84,8 @@ pip install -e .
 
 This creates a symlink instead of copying your code into site-packages.
 
-> Requires a `setup.py` in the root of your project.
+> Use when developing locally — any code changes will reflect immediately without reinstalling.  
+> Requires a `setup.py` or `pyproject.toml` in the root of your project.
 
 ---
 
@@ -86,11 +93,11 @@ This creates a symlink instead of copying your code into site-packages.
 
 | Situation                         | Best Practice                               |
 |----------------------------------|---------------------------------------------|
-| CI installs from Git repo        | Use pinned commit hash or tag (not main)    |
-| Dev installs (local editable)    | Use `pip install -e .`                      |
-| Public tools                     | Use PyPI or GitHub tags                     |
-| Private team projects            | Use GitLab with tokens or SSH               |
-| Reproducibility / Version locks  | Pin `@commit` or `@version`                 |
+| CI installs from Git repo        | Use pinned commit hash or tag (not main)   |
+| Dev installs (local editable)    | Use `pip install -e .`                     |
+| Public tools                     | Use PyPI or GitHub tags                    |
+| Private team projects            | Use GitLab with tokens or SSH              |
+| Reproducibility / Version locks  | Pin `@commit` or `@version`                |
 
 ---
 

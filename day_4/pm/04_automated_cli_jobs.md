@@ -4,14 +4,26 @@ This guide focuses on automating test execution (`pytest`, `unittest`) and deplo
 
 ---
 
+## Why Automate Testing and Deployment Together?
+
+Automating both ensures your code is validated before it reaches users — reducing risks of bugs or packaging errors slipping through.  
+CI/CD helps maintain reproducibility, consistency, and reliable collaboration within scientific projects.
+
+---
+
 ## 1. Automated Running of Tests
 
 ### Pytest
+
+#### When to Use:
+- Recommended for new projects or detailed feature testing  
+- Rich plugin ecosystem and better assertion introspection  
 
 1. **Install pytest and plugins**:
    ```bash
    pip install pytest pytest-cov
    ```
+
 2. **Write tests** under `tests/`, e.g.:
    ```python
    # tests/test_example.py
@@ -25,13 +37,10 @@ This guide focuses on automating test execution (`pytest`, `unittest`) and deplo
        with pytest.raises(ZeroDivisionError):
            math_utils.divide(1, 0)
    ```
+
 3. **Run pytest** with coverage and JUnit reporting:
    ```bash
-   pytest \
-     --maxfail=1 \
-     --disable-warnings \
-     --junitxml=report_pytest.xml \
-     --cov=mypkg --cov-report=xml
+   pytest      --maxfail=1      --disable-warnings      --junitxml=report_pytest.xml      --cov=mypkg --cov-report=xml
    ```
 
 #### CI Job Snippet for Pytest
@@ -41,9 +50,7 @@ run_pytest:
   image: python:3.10
   script:
     - pip install -r requirements-dev.txt     # includes pytest, pytest-cov
-    - pytest --maxfail=1 --disable-warnings \
-        --junitxml=report_pytest.xml \
-        --cov=mypkg --cov-report=xml
+    - pytest --maxfail=1 --disable-warnings         --junitxml=report_pytest.xml         --cov=mypkg --cov-report=xml
   artifacts:
     when: always
     reports:
@@ -57,11 +64,17 @@ run_pytest:
       - .cache/pip                           # Speed up pip install
 ```
 
+*Artifacts allow sharing reports between stages/jobs and visualization in GitLab UI.*
+
 ---
 
 ### unittest
 
-1. **Use `unittest`** for simple or legacy tests:
+#### When to Use:
+- Suitable for legacy code or projects already using unittest  
+- Good for quick checks or simple unit tests  
+
+1. **Write `unittest` tests**:
    ```python
    # tests/test_example_unittest.py
    import unittest
@@ -78,6 +91,7 @@ run_pytest:
    if __name__ == '__main__':
        unittest.main()
    ```
+
 2. **Run tests** and generate XML report:
    ```bash
    python -m unittest discover -v --buffer > report_unittest.txt
@@ -106,19 +120,22 @@ run_unittest:
 
 ## 2. Deploying from GitLab CI: Packaging & Distribution
 
-### Packaging
+### Packaging Options
 
-- **Legacy**:  
+- **Legacy:**  
   ```bash
   python setup.py sdist bdist_wheel
   ```
-- **PEP 517/518**:  
+
+- **Recommended Modern Approach (PEP 517/518):**  
   ```bash
   pip install build
   python -m build
   ```
 
-### CI Job for Deployment
+---
+
+### Deployment CI Job Example
 
 ```yaml
 deploy_package:
@@ -126,8 +143,8 @@ deploy_package:
   before_script:
     - pip install twine
   script:
-    - python -m build                       # build both sdist and wheel
-    - twine upload dist/*                   # uses $TWINE_USERNAME and $TWINE_PASSWORD
+    - python -m build                       # Build both sdist and wheel
+    - twine upload dist/*                   # Upload using secure credentials
   only:
     - main
   variables:
@@ -139,14 +156,28 @@ deploy_package:
       - .cache/pip
 ```
 
-- Use **`python -m build`** for modern packaging.
-- Ensure **secure variables** in GitLab CI/CD settings.
-- **Cache pip** to speed up repeated builds.
+- Use **`python -m build`** for modern Python packaging  
+- Use **TestPyPI** first for testing uploads:  
+  ```bash
+  twine upload --repository testpypi dist/*
+  ```
+- Always use **CI/CD Variables** for secrets  
+- Cache pip to speed up installations in repeated builds  
+
+---
+
+## Final Checklist
+
+Tests run automatically on every push or merge request  
+Test reports and coverage collected and visualized in GitLab CI/CD  
+Deployment triggered only after successful tests on the `main` branch  
+Sensitive credentials stored securely in CI/CD variables  
+Builds optimized with caching for efficiency  
+Use of TestPyPI for deployment dry-runs before live deployment  
 
 ---
 
 ## Summary
 
-- **Pytest & unittest**: automatable with JUnit/coverage reports.
-- **CI snippets**: Focus on test execution, reporting, and artifact persistence.
-- **Deployment**: Modern packaging + Twine, leveraging cached dependencies.
+By automating testing and deployment, you gain confidence in your software quality, streamline your release process, and maintain reproducibility across environments.  
+CI/CD allows you to detect problems early, automate routine tasks, and ensure your scientific code is reliable and maintainable.

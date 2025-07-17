@@ -37,7 +37,7 @@ Examples
 
 --------------------------------------------------
 
-Scientific-Specific Guidance
+Scientific Guidance
 ----------------------------
  Breaking = Changing how users *interact* with the module  
 “Different results” != breaking, unless the interface changes*
