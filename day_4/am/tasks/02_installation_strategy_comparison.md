@@ -33,8 +33,8 @@ pip install -e .
 
 # Run version check
 python - <<EOF
-import mypkg
-print("Version (Editable Install):", mypkg.__version__)
+import make_env_here
+print("Version (Editable Install):", make_env_here.__version__)
 EOF
 
 # Deactivate environment
@@ -57,8 +57,8 @@ pip install -r environment.lock.txt
 
 # Run version check
 python - <<EOF
-import mypkg
-print("Version (Locked Install):", mypkg.__version__)
+import make_env_here
+print("Version (Locked Install):", make_env_here.__version__)
 EOF
 
 # Deactivate environment

@@ -15,12 +15,8 @@ setup(
         "sqlalchemy>=1.4",
         "click>=8.0",
         "pytest>=7.0",
-        "coverage",
-        "pdbpp",
-        "cython>=0.29",
-        "tabulate",
-        "rich",
     ],
+
 
     python_requires=">=3.8",
 )

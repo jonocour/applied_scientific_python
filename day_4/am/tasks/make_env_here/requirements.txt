@@ -3,9 +3,5 @@ numpy>=1.21
 sqlalchemy>=1.4
 click>=8.0
 pytest>=7.0
-coverage
-pdbpp
-cython>=0.29
 setuptools>=78.1.1
-tabulate
-rich
+
