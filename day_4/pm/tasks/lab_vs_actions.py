@@ -24,12 +24,3 @@ Topics Covered:
 
 """
 
-# mypkg/__init__.py
-__version__ = "1.0.0"
-
-
-
-# git tag v1.0.0               # Lightweight tag
-# git tag -a v1.0.0 -m "Release 1.0.0"  # Annotated tag
-# git push origin v1.0.0       # Push tag to remote
-# git tag                      # List all tags
