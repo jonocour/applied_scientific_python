@@ -36,5 +36,4 @@ setuptools>=78.1.1  # Modern packaging system (required for pip install, build, 
 # ===============================
 
 tabulate          # Create pretty tables in terminal — used in CLI reporting
-rich              # Beautiful CLI formatting — useful for logs, errors, test output
-~                                                                                                      ~                                                                                                      ~                                   
+rich              # Beautiful CLI formatting — useful for logs, errors, test output:                            
