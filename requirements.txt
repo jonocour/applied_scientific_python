@@ -1,0 +1,40 @@
+# ===============================
+# Core Scientific Dependencies
+# ===============================
+
+pandas>=1.3       # High-performance data structures (used for cleaning, grouping, analysis)
+numpy>=1.21       # Fast numerical computing (vectorized ops, array math)
+sqlalchemy>=1.4   # ORM for data modeling and querying scientific datasets
+
+# ===============================
+# CLI and Argument Handling
+# ===============================
+
+argparse          # Standard lib — used in basic command-line interfaces (don’t pip install)
+click>=8.0        # Cleaner CLI interfaces with decorators (used in advanced tasks)
+
+# ===============================
+# Testing & Debugging Tools
+# ===============================
+
+pytest>=7.0       # Main test framework used in most examples
+#unittest          # Standard lib — used in Day 2 examples for legacy test structure
+#traceback         # Standard lib — used for formatting exception tracebacks
+coverage          # Measure test coverage of your code
+pdbpp             # Drop-in replacement for `pdb` with better formatting and introspection
+
+# ===============================
+# Performance Optimization
+# ===============================
+
+cython>=0.29      # C-level speedups (used in performance comparison with NumPy/ORM)
+setuptools>=78.1.1  # Modern packaging system (required for pip install, build, editable installs)
+# You’ll need a C compiler installed for Cython to build (e.g., Xcode tools on Mac)
+
+# ===============================
+# Extras for Clean Output / UX
+# ===============================
+
+tabulate          # Create pretty tables in terminal — used in CLI reporting
+rich              # Beautiful CLI formatting — useful for logs, errors, test output
+~                                                                                                      ~                                                                                                      ~                                   
