@@ -23,7 +23,7 @@ jobs:
           python -m venv .venv
           source .venv/bin/activate
           pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r ../../day_4/am/01_setup_recap/requirements.txt
       - name: Save environment
         run: echo "Dependencies installed"
 
